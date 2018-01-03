@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ 
+
+ <!DOCTYPE mapper
+
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="spring.mvc.myWebProject.cart.persistence.CartDAO">
+	<select id="getNumOfCart" resultType="int">
+		SELECT COUNT(*) FROM CART
+	</select>
+	
+	<select id="getCartList" resultType="spring.mvc.myWebProject.cart.vo.CartVO">
+		<![CDATA[
+			SELECT * FROM (SELECT CART_ID, NUM, ID, PRODUCT_CODE, AMOUNT, ROWNUM NROWS
+						   FROM (SELECT * FROM CART ORDER BY NUM))
+			WHERE NROWS >= #{start} AND NROWS <= #{end}
+			AND ID=#{curr_id}
+		]]>
+	</select>
+	
+	<select id="getCartContent" resultType="spring.mvc.myWebProject.cart.vo.CartVO">
+		SELECT * FROM CART WHERE CART_ID=#{cart_id}
+	</select>
+	
+	<insert id="addWishListPro" parameterType="spring.mvc.myWebProject.cart.vo.CartVO">
+		INSERT INTO CART VALUES(#{cart_id}, CART_SEQ.NEXTVAL, #{id}, #{product_code}, #{amount})
+	</insert>
+	
+	<delete id="delWishListPro" parameterType="java.util.Map">
+		DELETE FROM CART WHERE ID=#{curr_id} AND CART_ID=#{checkedCart}
+	</delete>
+</mapper>

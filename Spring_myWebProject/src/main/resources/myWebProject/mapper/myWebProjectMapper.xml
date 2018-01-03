@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ 
+
+ <!DOCTYPE mapper
+
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="spring.mvc.myWebProject.member.persistence.MemberPersistence">
+	<select id="checkDupl" resultType="int">
+		SELECT COUNT(*) FROM MEMBER WHERE ID=#{id}
+	</select>
+	
+	<insert id="proJoinUser" parameterType="spring.mvc.myWebProject.member.vo.MemberVO">
+		INSERT INTO MEMBER VALUES (#{id}, #{pwd}, #{name}, #{jumin}, #{email}, #{address}, #{hp}, #{reg_date})
+	</insert> 
+	
+	<select id="getPwd" resultType="String">
+		SELECT PWD FROM MEMBER WHERE ID=#{id}
+	</select>
+	
+	<select id="getCustInfo" resultType="spring.mvc.myWebProject.member.vo.MemberVO">
+		SELECT * FROM MEMBER WHERE ID=#{id}
+	</select>
+	
+	<update id="proUpdate" parameterType="spring.mvc.myWebProject.member.vo.MemberVO">
+		UPDATE MEMBER SET PWD=#{pwd}, EMAIL=#{email}, ADDRESS=#{address}, HP=#{hp} WHERE ID=#{id}
+	</update>
+	
+	<delete id="proDropUser" parameterType="String">
+		DELETE FROM MEMBER WHERE ID=#{id}
+	</delete>
+</mapper> 

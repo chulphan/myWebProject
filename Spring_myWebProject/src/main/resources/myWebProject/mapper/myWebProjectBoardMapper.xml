@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ 
+
+ <!DOCTYPE mapper
+
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="spring.mvc.myWebProject.board.persistence.BoardDAO">
+	
+	<select id="getNumOfArticle" resultType="int">
+		SELECT COUNT(*) FROM MY_BOARD
+	</select>
+	
+	<select id="getArticleList" resultType="spring.mvc.myWebProject.board.vo.BoardVO">
+		SELECT * FROM (SELECT num, writer, pwd, subject, content, readCnt, 
+				      ref, ref_step, ref_level, reg_date, ip, rownum rNum
+				      FROM ( SELECT * FROM my_board            
+				      ORDER BY ref DESC, ref_step asc 
+				      )) WHERE rNum BETWEEN #{start} and #{end}
+	</select>
+	
+	<select id="getMaxNum" resultType="int">
+		SELECT MAX(NUM) FROM MY_BOARD
+	</select>
+	
+	<update id="updateReplyToUp" parameterType="java.util.Map">
+		<![CDATA[
+			UPDATE MY_BOARD SET REF_STEP=REF_STEP+1 WHERE REF=#{ref} AND REF_STEP > #{ref_step}
+		]]>
+	</update>
+	
+	<insert id="insertPost" parameterType="spring.mvc.myWebProject.board.vo.BoardVO">
+		INSERT INTO MY_BOARD VALUES(MY_BOARD_SEQ.NEXTVAL, #{writer}, #{pwd}, #{subject}, #{content}, 0, #{ref}, #{ref_step}, #{ref_level}, #{reg_date}, #{ip})
+	</insert>
+	
+	<select id="getArticleContent" resultType="spring.mvc.myWebProject.board.vo.BoardVO">
+		SELECT * FROM MY_BOARD WHERE NUM=#{num}
+	</select>
+	
+	<update id="addReadCnt" parameterType="int">
+		UPDATE MY_BOARD SET READCNT=READCNT+1 WHERE NUM=#{num}
+	</update>
+	
+	<update id="modifyPro" parameterType="spring.mvc.myWebProject.board.vo.BoardVO">
+		UPDATE MY_BOARD SET SUBJECT=#{subject}, CONTENT=#{content} WHERE NUM=#{num}
+	</update>
+	
+	<delete id="removeArticle" parameterType="java.util.Map">
+		DELETE FROM MY_BOARD WHERE NUM=#{num} AND PWD=#{pwd}
+	</delete>
+	
+</mapper>

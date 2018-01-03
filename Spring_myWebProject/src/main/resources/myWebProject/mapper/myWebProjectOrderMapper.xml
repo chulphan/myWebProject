@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ 
+
+ <!DOCTYPE mapper
+
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="spring.mvc.myWebProject.order.persistence.OrderDAO">
+
+	<select id="getNumOfOrder" resultType="int">
+		SELECT COUNT(*) FROM ORDERS
+	</select>
+	
+	<select id="getOrderContent" resultType="spring.mvc.myWebProject.order.vo.OrderVO">
+		SELECT * FROM ORDERS WHERE ORDER_CODE=#{order_code}
+	</select>
+	
+	<select id="getOrderList" resultType="spring.mvc.myWebProject.order.vo.OrderVO">
+		SELECT *
+		FROM (SELECT NUM, ORDER_CODE, PRODUCT_CODE, ID, AMOUNTOFPURCHASE, ORDER_DATE, ORDER_STATUS, PURCHASE_PRICE, ROWNUM NROWS 
+				FROM (SELECT * FROM ORDERS ORDER BY NUM ASC))
+		WHERE NROWS BETWEEN #{start} AND #{end}
+	</select>
+</mapper>

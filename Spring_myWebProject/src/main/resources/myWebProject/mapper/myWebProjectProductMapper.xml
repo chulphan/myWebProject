@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ 
+
+ <!DOCTYPE mapper
+
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="spring.mvc.myWebProject.product.persistence.ProductDAO">
+	
+	<select id="getNumOfProduct" resultType="int">
+		SELECT COUNT(*) FROM PRODUCT
+	</select>
+	
+	<select id="getProductList" resultType="spring.mvc.myWebProject.product.vo.ProductVO">
+		<![CDATA[
+			SELECT *
+			FROM (SELECT NUM, PRODUCT_CODE, PRODUCT_COMPANY, PRODUCT_NAME, product_price, product_amount, IMG_NAME, rownum numrow
+				  FROM (SELECT * FROM PRODUCT
+				  ORDER BY NUM))
+			WHERE NUMROW >= #{start} AND NUMROW <= #{end}
+		]]>
+	</select>
+	
+	<delete id="deleteProduct" parameterType="String">
+		DELETE FROM PRODUCT WHERE PRODUCT_CODE=#{product_code}
+	</delete>
+	
+	<select id="searchProduct" resultType="spring.mvc.myWebProject.product.vo.ProductVO">
+		SELECT * FROM PRODUCT
+		<where>
+			<if test="searchOpt == 'product_name'">
+				PRODUCT_NAME LIKE '%'||#{searchCode}||'%'
+			</if>
+			<if test="searchOpt == 'product_code'">
+				PRODUCT_CODE LIKE '%'||#{searchCode}||'%'
+			</if>
+			<if test="searchOpt != 'product_name' and searchOpt != 'product_code'">
+				PRODUCT_COMPANY LIKE '%'||#{searchCode}||'%'
+			</if>
+		</where>
+	</select>	
+	
+	<select id="detailProduct" resultType="spring.mvc.myWebProject.product.vo.ProductVO">
+		SELECT * FROM PRODUCT WHERE PRODUCT_CODE=#{product_code}
+	</select>
+
+	<select id="getProductAmount" resultType="int">
+		SELECT PRODUCT_AMOUNT FROM PRODUCT WHERE PRODUCT_CODE=#{product_code}
+	</select>	
+	
+	<select id="getProductPrice" resultType="int">
+		SELECT PRODUCT_PRICE FROM PRODUCT WHERE PRODUCT_CODE=#{product_code}
+	</select>
+	
+	<select id="getProductInfo" resultType="spring.mvc.myWebProject.product.vo.ProductVO">
+		SELECT * FROM PRODUCT WHERE PRODUCT_CODE=#{product_code}
+	</select>
+	
+</mapper>
