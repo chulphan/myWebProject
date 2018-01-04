@@ -9,7 +9,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
     
 <mapper namespace="spring.mvc.myWebProject.order.persistence.OrderDAO">
-
+	
+	<resultMap id="orderMap" type="spring.mvc.myWebProject.order.vo.OrderVO">
+		<id		property="order_code"		column="order_code"/>
+		<result	property="num"				column="num"/>
+		<result	property="product_code"		column="product_code"/>
+		<result	property="id"		column="id"/>
+		<result	property="amountOfPurchase"		column="amountOfPurchase"/>
+		<result	property="order_date"		column="order_date"/>
+		<result	property="order_status"		column="order_status"/>
+		<result	property="seller_id"		column="seller_id"/>
+		<result	property="purchase_price"		column="purchase_price"/>
+		
+		<association 	property="product" resultMap="productMap"/>
+		
+		<association	property="member"	resultMap="memberMap"/>
+	</resultMap>
+	
+	<resultMap id="productMap" type="spring.mvc.myWebProject.product.vo.ProductVO">
+		<result property="img_name"			column="img_name"/>
+		<result property="product_company"  column="product_company"/>
+		<result property="product_amount"	column="product_amount"/>
+		<result	property="product_price"	column="product_price"/>
+		<result property="product_name"		column="product_name"/>
+	</resultMap>
+	
+	<resultMap id="memberMap" type="spring.mvc.myWebProject.member.vo.MemberVO">
+		<result property="name"		column="name"/>
+		<result	property="address"	column="address"/>
+		<result property="email"	column="email"/>
+		<result property="hp"		column="hp"/>
+		<result property="reg_date"	column="reg_date"/>
+	</resultMap>
+	
 	<select id="getNumOfOrder" resultType="int">
 		SELECT COUNT(*) FROM ORDERS
 	</select>
@@ -18,10 +50,68 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT * FROM ORDERS WHERE ORDER_CODE=#{order_code}
 	</select>
 	
-	<select id="getOrderList" resultType="spring.mvc.myWebProject.order.vo.OrderVO">
-		SELECT *
-		FROM (SELECT NUM, ORDER_CODE, PRODUCT_CODE, ID, AMOUNTOFPURCHASE, ORDER_DATE, ORDER_STATUS, PURCHASE_PRICE, ROWNUM NROWS 
-				FROM (SELECT * FROM ORDERS ORDER BY NUM ASC))
-		WHERE NROWS BETWEEN #{start} AND #{end}
+	<select id="getOrderList" resultMap="orderMap">
+		 SELECT *
+ 		 FROM (SELECT NUM, ORDER_CODE, PRODUCT_CODE, PRODUCT_PRICE, AMOUNTOFPURCHASE, ID, ADDRESS, ORDER_STATUS, ROWNUM NROWS
+         FROM (SELECT O.NUM, O.ORDER_CODE, O.PRODUCT_CODE, P.PRODUCT_PRICE, O.AMOUNTOFPURCHASE, M.ID, M.ADDRESS, O.ORDER_STATUS
+         FROM MEMBER M LEFT OUTER JOIN ORDERS O
+         ON (M.ID=O.ID)
+         LEFT OUTER JOIN PRODUCT P
+         ON(O.PRODUCT_CODE=P.PRODUCT_CODE)
+         WHERE O.ORDER_CODE IS NOT NULL
+         ORDER BY O.NUM ASC
+         ))
+  		 WHERE NROWS BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="cust_getNumOfOrder" resultType="int">
+		SELECT COUNT(*) FROM ORDERS WHERE ID=#{curr_id}
+	</select>
+	
+	<select id="cust_getOrderList" resultMap="orderMap">
+		<![CDATA[
+			SELECT *
+			FROM (SELECT NUM, IMG_NAME, PRODUCT_NAME, ORDER_CODE, PRODUCT_CODE, PRODUCT_PRICE, AMOUNTOFPURCHASE, ID, ADDRESS, ORDER_STATUS, ROWNUM NROWS
+	      		  FROM (SELECT O.NUM, P.IMG_NAME, P.PRODUCT_NAME, O.ORDER_CODE, O.PRODUCT_CODE, P.PRODUCT_PRICE, O.AMOUNTOFPURCHASE, M.ID, M.ADDRESS, O.ORDER_STATUS
+	      		  FROM MEMBER M LEFT OUTER JOIN ORDERS O
+	      		  ON (M.ID=O.ID)
+	     		  LEFT OUTER JOIN PRODUCT P
+	     		  ON(O.PRODUCT_CODE=P.PRODUCT_CODE)
+	     		  WHERE O.ORDER_CODE IS NOT NULL
+	     		  ORDER BY O.NUM ASC
+	     		  ))
+			 WHERE NROWS >= #{start} AND NROWS <= #{end}
+			 AND ID=#{curr_id}
+		]]>
+	</select>
+	
+	<select id="getProduct" resultType="spring.mvc.myWebProject.product.vo.ProductVO">
+		SELECT * FROM PRODUCT WHERE PRODUCT_CODE=#{product_code}
+	</select>
+	
+	<select id="getMemberInfo" resultType="spring.mvc.myWebProject.member.vo.MemberVO">
+		SELECT * FROM MEMBER WHERE ID=#{id}
+	</select>
+	
+	<insert id="insertIntoOrder" parameterType="spring.mvc.myWebProject.order.vo.OrderVO">
+		INSERT INTO ORDERS VALUES (#{order_code}, orders_seq.nextval, #{product_code}, #{id}, #{amountOfPurchase}, #{order_date}, #{order_status}, 'manager', #{purchase_price})
+	</insert>
+	
+	<resultMap id="cartMap" type="spring.mvc.myWebProject.cart.vo.CartVO">
+		<id		property="cart_id"		column="cart_id"/>
+		<result	property="num"			column="num"/>
+		<result	property="id"			column="id"/>
+		<result	property="product_code"	column="product_code"/>
+		<result	property="amount"		column="amount"/>
+		<association	property="member"	resultMap="memberMap"/>
+		<association	property="product"	resultMap="productMap"/>
+	</resultMap>
+	
+	<select id="getCartContent"		resultMap="cartMap">
+		SELECT C.CART_ID,  M.ID, M.NAME, P.PRODUCT_CODE, P.IMG_NAME, P.PRODUCT_COMPANY, P.PRODUCT_PRICE, P.PRODUCT_NAME, M.ADDRESS, M.EMAIL, M.HP, M.REG_DATE, C.AMOUNT
+    	FROM CART C LEFT OUTER JOIN MEMBER M
+    	ON C.ID=M.ID
+    	LEFT OUTER JOIN PRODUCT P
+    	ON P.PRODUCT_CODE=C.PRODUCT_CODE
 	</select>
 </mapper>

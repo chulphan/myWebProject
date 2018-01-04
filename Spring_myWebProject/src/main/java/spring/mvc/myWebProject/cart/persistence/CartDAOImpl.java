@@ -1,9 +1,5 @@
 package spring.mvc.myWebProject.cart.persistence;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -12,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import spring.mvc.myWebProject.cart.vo.CartVO;
+import spring.mvc.myWebProject.product.vo.ProductVO;
 
 @Repository
 public class CartDAOImpl implements CartDAO{
@@ -128,4 +125,16 @@ public class CartDAOImpl implements CartDAO{
 		return priceAndAmount;
 	}
 	*/
+
+	@Override
+	public ProductVO detailProduct(String product_code) {
+		
+		ProductVO pVo = null;
+		
+		CartDAO cDao = sqlSession.getMapper(CartDAO.class);
+		
+		pVo = cDao.detailProduct(product_code);
+		
+		return pVo;
+	}
 }

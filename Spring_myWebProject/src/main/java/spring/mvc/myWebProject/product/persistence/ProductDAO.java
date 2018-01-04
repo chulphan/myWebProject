@@ -31,4 +31,5 @@ public interface ProductDAO {
 	public int getProductPrice(String product_code);
 	
 	public ProductVO getProductInfo(String product_code);
+	
 }

@@ -2,6 +2,9 @@ package spring.mvc.myWebProject.order.vo;
 
 import java.sql.Timestamp;
 
+import spring.mvc.myWebProject.member.vo.MemberVO;
+import spring.mvc.myWebProject.product.vo.ProductVO;
+
 public class OrderVO {
 	private String order_code;
 	private int num;
@@ -13,12 +16,16 @@ public class OrderVO {
 	private String seller_id;
 	private int purchase_price;
 	
+	private MemberVO member;
+	private ProductVO product;
+	
 	public OrderVO() {
 		
 	}
 
 	public OrderVO(String order_code, int num, String product_code, String id, int amountOfPurchase,
-			String order_status, Timestamp order_date, String seller_id, int purchase_price) {
+			String order_status, Timestamp order_date, String seller_id, int purchase_price,
+			MemberVO member, ProductVO product) {
 		this.order_code = order_code;
 		this.num = num;
 		this.product_code = product_code;
@@ -28,6 +35,8 @@ public class OrderVO {
 		this.order_date = order_date;
 		this.seller_id = seller_id;
 		this.purchase_price = purchase_price;
+		this.member = member;
+		this.product = product;
 	}
 
 
@@ -92,6 +101,23 @@ public class OrderVO {
 	public void setPurchase_price(int purchase_price) {
 		this.purchase_price = purchase_price;
 	}
+
+	public MemberVO getMember() {
+		return member;
+	}
+
+	public void setMember(MemberVO member) {
+		this.member = member;
+	}
+
+	public ProductVO getProduct() {
+		return product;
+	}
+
+	public void setProduct(ProductVO product) {
+		this.product = product;
+	}
+	
 	
 	
 }

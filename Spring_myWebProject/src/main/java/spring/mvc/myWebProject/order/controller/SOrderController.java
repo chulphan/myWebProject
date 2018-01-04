@@ -16,11 +16,43 @@ public class SOrderController {
 	@Autowired
 	OrderService oService;
 	
-	@RequestMapping(value="cust_myAccount", method=RequestMethod.GET)
-	public String cust_myAccount(HttpServletRequest req, Model model) {
+	@RequestMapping(value="host_manageOrder", method=RequestMethod.GET)
+	public String host_managerOrder(HttpServletRequest req, Model model) {
 		
 		oService.orderList(req, model);
 		
+		return "/order/host_manageOrder";
+	}
+	
+	@RequestMapping(value="cust_myAccount", method=RequestMethod.GET)
+	public String cust_myAccount(HttpServletRequest req, Model model) {
+		
+		oService.cust_orderList(req, model);
+		
 		return "/order/cust_myAccount";
+	}
+	
+	@RequestMapping(value="buyProductForm", method=RequestMethod.GET)
+	public String buyProductForm(HttpServletRequest req, Model model) {
+		
+		oService.getProductDetail(req, model);
+		
+		return "/order/buyProductForm";
+	}
+	
+	@RequestMapping(value="buyProductPro")
+	public String buyProductPro(HttpServletRequest req, Model model) {
+		
+		oService.buyProductPro(req, model);
+		
+		return "/order/buyProductPro";
+	}
+	
+	@RequestMapping(value="buyWishListForm")
+	public String buyWishListForm(HttpServletRequest req, Model model) {
+		
+		oService.getCartProductDetail(req, model);
+		
+		return "/order/buyWishListForm";
 	}
 }

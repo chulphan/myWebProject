@@ -97,11 +97,11 @@
 														<td class="orderList_column"><input type="checkbox" class="checkOrder" name="checkOrder" value="${oAry.order_code }"></td>
 														<td class="orderList_column"> ${oAry.num } </td>
 														<td class="orderList_column" colspan="2"> ${oAry.order_code } </td>
-														<td class="orderList_column" colspan="2"> ${productInfo[status.index].product_code } </td>
-														<td class="orderList_column" colspan="2"> ${oAry.getPurchase_price() } (${productInfo[status.index].product_price} * ${oAry.amountOfPurchase }) </td>
+														<td class="orderList_column" colspan="2"> ${oAry.product_code } </td>
+														<td class="orderList_column" colspan="2"> ${oAry.getPurchase_price() } (${oAry.getProduct().product_price} * ${oAry.amountOfPurchase }) </td>
 														<td class="orderList_column" colspan="2"> ${oAry.amountOfPurchase } </td>
 														<td class="orderList_column" colspan="2"> ${oAry.id } </td>
-														<td class="orderList_column" colspan="2"> ${memberInfo[status.index].address}</td>
+														<td class="orderList_column" colspan="2"> ${oAry.getMember().address}</td>
 														<td class="orderList_column" colspan="2"> ${oAry.order_status } </td>
 													</tr>
 												</c:forEach>
@@ -116,8 +116,8 @@
 											<th align="center">
 												<c:if test="${requestScope.cnt > 0 }">
 													<c:if test="${startPage > pageBlock }">
-														<a href="host_myAccount.pdt">[◀◀]</a>
-														<a href="host_myAccount.pdt?pageNum=${startPage - pageBlock }">[◀]</a>
+														<a href="host_myAccount">[◀◀]</a>
+														<a href="host_myAccount?pageNum=${startPage - pageBlock }">[◀]</a>
 													</c:if>
 													
 													<c:forEach var="i" begin="${startPage }" end="${endPage }">
@@ -125,12 +125,12 @@
 															<span><b>[${i }]</b></span>
 														</c:if>
 														<c:if test="${i!=currentPage }">
-															<a href="host_myAccount.pdt?pageNum=${i }">[${i }]</a>
+															<a href="host_myAccount?pageNum=${i }">[${i }]</a>
 														</c:if>
 													</c:forEach>
 													<c:if test="${pageCount>endPage}">
-														<a href="host_myAccount.pdt?pageNum=${startPage+pageBlock }">[▶]</a>
-														<a href="host_myAccount.pdt?pageNum=${pageCount }">[▶▶]</a>
+														<a href="host_myAccount?pageNum=${startPage+pageBlock }">[▶]</a>
+														<a href="host_myAccount?pageNum=${pageCount }">[▶▶]</a>
 													</c:if>
 												</c:if>
 											</th>

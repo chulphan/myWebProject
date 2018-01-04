@@ -78,7 +78,7 @@ public class CartServiceImpl implements CartService{
 			if (cAry != null) {
 				for (CartVO o : cAry) {
 					
-					pVo = pDao.detailProduct(o.getProduct_code()); 
+					pVo = cDao.detailProduct(o.getProduct_code()); 
 					
 					productInfo.add(pVo);
 				}

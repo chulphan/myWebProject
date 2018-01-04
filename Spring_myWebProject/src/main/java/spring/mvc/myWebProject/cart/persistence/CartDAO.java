@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import spring.mvc.myWebProject.cart.vo.CartVO;
+import spring.mvc.myWebProject.product.vo.ProductVO;
 
 public interface CartDAO {
 	
@@ -13,6 +14,7 @@ public interface CartDAO {
 	
 	public CartVO getCartContent(String cart_id);
 	
+	public ProductVO detailProduct(String product_code);
 	
 	public int addWishListPro(CartVO cVo);
 	

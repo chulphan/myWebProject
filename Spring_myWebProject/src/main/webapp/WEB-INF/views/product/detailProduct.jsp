@@ -285,8 +285,8 @@
 										<span class="product-details-hidden" data-product-stock="" data-product-stock-level="">0</span>
 									</div>
 									<hr>
-									<form class="form-add-to-cart-form" name="detailProduct" method="get" action="buyProductForm.order"  data-cart-item-add data-product-options-count="0" novalidate="true">
-										<input type="hidden" name="product_code" value="BANDAI 143369" data-product-id>
+									<form class="form-add-to-cart-form" name="detailProduct" method="get" action="buyProductForm"  data-cart-item-add data-product-options-count="0" novalidate="true">
+										<input type="hidden" name="product_code" value="B123456" data-product-id>
 										<input type="hidden" name="user_id" value="${sessionScope.curr_id}">
 										<div class="product-options-container" data-product-option-change>
 										

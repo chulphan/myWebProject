@@ -11,9 +11,9 @@
 			<header class="top-menu">
 				<div class="menu-bar">
 					<ul class="menu-collector">
-						<li class="myAccount"><a href="logout.do">로그아웃</a></li>
+						<li class="myAccount"><a href="logout">로그아웃</a></li>
 						<li class="language"><a href="#">언어</a></li>
-						<li class="main_logo"><a href="mainSuccess.do"><img src="./images/logo.png" style="width:250px; height:59px"></a>
+						<li class="main_logo"><a href="mainSuccess"><img src="./images/logo.png" style="width:250px; height:59px"></a>
 						<li class="order_list"><a href="#">찜 목록</a></li>
 						<li class="cart_list"><a href="#">장바구니</a></li>
 					</ul>
@@ -78,10 +78,10 @@
 									<h1 class="account-heading">주문/결제</h1>
 									<div class="account-toolbar"></div>
 								</div>
-									<form class="" action="buyProductPro.order" name="buyProductForm.order">  
-										<input type="hidden" name="product_amount" value="${pVo.product_amount }">
+									<form class="" action="buyProductPro" name="buyProductForm">  
+										<input type="hidden" name="product_amount" value="${product_amount }">
 										<input type="hidden" name="product_code" value="${pVo.product_code }">
-										<input type="hidden" name="purchase_price" value="${pVo.product_price * pVo.product_amount }">
+										<input type="hidden" name="purchase_price" value="${pVo.product_price * product_amount }">
 										
 										<div class="order-list">
 											<h3>01. 주문상품목록</h3>
@@ -94,11 +94,10 @@
 													<td class="order-table_column" colspan=2>배송/판매자</td>
 												</tr>
 												<tr class="order-table_row">
-													
-													<td class="order-table_column" colspan=2><img src="/WebProject_jsp/WebContent/a/images/best-sell-images/${pVo.img_path }" style="width:100px;height:100px">${pVo.product_name }</td>
+													<td class="order-table_column" colspan=2><img src="/WebProject_jsp/WebContent/a/images/best-sell-images/${pVo.img_name}" style="width:100px;height:100px">${pVo.product_name }</td>
 													<td class="order-table_column" colspan=2>${pVo.product_price }</td>
-													<td class="order-table_column" colspan=2>${pVo.product_amount }</td>
-													<td class="order-table_column" colspan=2>${pVo.product_price * pVo.product_amount}</td>
+													<td class="order-table_column" colspan=2>${product_amount }</td>
+													<td class="order-table_column" colspan=2>${pVo.product_price * product_amount}</td>
 													<td class="order-table_column" colspan=2>host</td>
 												</tr>
 											</table>

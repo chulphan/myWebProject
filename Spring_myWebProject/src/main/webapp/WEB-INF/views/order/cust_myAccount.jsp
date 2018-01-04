@@ -120,14 +120,14 @@
 												<td class="order-table_column" colspan=2>배송상태</td>
 											</tr>
 											<c:if test="${requestScope.cnt > 0 }">
-												<c:forEach var="oAry" items="${requestScope.oAry }" varStatus="status">	
+												<c:forEach var="oAry" items="${oAry }" varStatus="status">	
 													<tr class="order-table_row">
 														<td class="order-table_column"><input type="checkbox" name="orderCheck" value="${oAry.order_code }"></td>
-														<td class="order-table_column"><img src="${productInfo[status.index].img_path}" style="width:100px;height:100px"></td>
+														<td class="order-table_column"><img src="${oAry.getProduct().img_name}" style="width:100px;height:100px"></td>
 														<td class="order-table_column" colspan=2>${oAry.num }</td>
 														<td class="order-table_column" colspan=2>${oAry.product_code }</td>
-														<td class="order-table_column" colspan=2>${productInfo[status.index].product_name }</td>
-														<td class="order-table_column" colspan=2>${productInfo[status.index].product_price }</td>
+														<td class="order-table_column" colspan=2>${oAry.getProduct().product_name }</td>
+														<td class="order-table_column" colspan=2>${oAry.getProduct().product_price }</td>
 														<td class="order-table_column" colspan=2>${oAry.amountOfPurchase }</td>
 														<td class="order-table_column" colspan=2>${oAry.order_status }</td>
 														<td class="order-table_column" colspan=2></td>

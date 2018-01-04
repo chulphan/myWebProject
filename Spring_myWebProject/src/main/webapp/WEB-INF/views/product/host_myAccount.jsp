@@ -11,9 +11,9 @@
 			<header class="top-menu">
 				<div class="menu-bar">
 					<ul class="menu-collector">
-						<li class="myAccount"><a href="logout.do">로그아웃</a></li>
+						<li class="myAccount"><a href="logout">로그아웃</a></li>
 						<li class="language"><a href="#">언어</a></li>
-						<li class="main_logo"><a href="mainSuccess.do"><img src="./images/logo.png" style="width:250px; height:59px"></a>
+						<li class="main_logo"><a href="mainSuccess"><img src="./images/logo.png" style="width:250px; height:59px"></a>
 						<li class="order_list"><a href="#">찜 목록</a></li>
 						<li class="cart_list"><a href="#">장바구니</a></li>
 					</ul>
@@ -55,12 +55,12 @@
 					<div class="breadcrumbs-container">
 						<ul class="breadcrumbs" itemscope itemtype="http://schema.org/BreadcrumbList">
 							<li class="breadcrumb">
-								<a href="mainSuccess.do" itemprop="url" class="breadcrumb-label breadcrumb-link">
+								<a href="mainSuccess" itemprop="url" class="breadcrumb-label breadcrumb-link">
 									<span itemprop="name">메인</span>
 								</a>
 							</li>
 							<li class="breadcrumb ">
-								<a href="host_myAccount.do" itemprop="url" class="breadcrumb-label breadcrumb-link">
+								<a href="host_myAccount" itemprop="url" class="breadcrumb-label breadcrumb-link">
 									<span itemprop="name">관리자 계정</span>
 								</a>
 							</li>
@@ -76,21 +76,21 @@
 							<nav class="account-nav">
 								<ul class="account-nav-list">
 									<li class="account-nav-item-is-active">
-										<a class="account-nav-link" href="host_myAccount.do" style="text-align:center;">
+										<a class="account-nav-link" href="host_myAccount" style="text-align:center;">
 											재고관리
 										</a>
 									</li>
 									<li class="account-nav-item">
-										<a class="account-nav-link" href="host_manageOrder.order">주문관리</a>
+										<a class="account-nav-link" href="host_manageOrder">주문관리</a>
 									</li>
 									<li class="account-nav-item">
-										<a class="account-nav-link" href="host_finalAccount.do">결산</a>
+										<a class="account-nav-link" href="host_finalAccount">결산</a>
 									</li>
 									<li class="account-nav-item">
 										<a class="account-nav-link" href="boardList">게시판</a>
 									</li>
 									<li class="account-nav-item">
-										<a class="account-nav-link" href="host_manageGuestInfo.do">회원관리</a>
+										<a class="account-nav-link" href="host_manageGuestInfo">회원관리</a>
 									</li>
 								</ul>
 							</nav>
@@ -133,8 +133,8 @@
 										<th align="center">
 											<c:if test="${requestScope.cnt > 0 }">
 												<c:if test="${startPage > pageBlock }">
-													<a href="host_myAccount.pdt">[◀◀]</a>
-													<a href="host_myAccount.pdt?pageNum=${startPage - pageBlock }">[◀]</a>
+													<a href="host_myAccount">[◀◀]</a>
+													<a href="host_myAccount?pageNum=${startPage - pageBlock }">[◀]</a>
 												</c:if>
 												
 												<c:forEach var="i" begin="${startPage }" end="${endPage }">
@@ -142,21 +142,21 @@
 														<span><b>[${i }]</b></span>
 													</c:if>
 													<c:if test="${i!=currentPage }">
-														<a href="host_myAccount.pdt?pageNum=${i }">[${i }]</a>
+														<a href="host_myAccount?pageNum=${i }">[${i }]</a>
 													</c:if>
 												</c:forEach>
 												<c:if test="${pageCount>endPage}">
-													<a href="host_myAccount.pdt?pageNum=${startPage+pageBlock }">[▶]</a>
-													<a href="host_myAccount.pdt?pageNum=${pageCount }">[▶▶]</a>
+													<a href="host_myAccount?pageNum=${startPage+pageBlock }">[▶]</a>
+													<a href="host_myAccount?pageNum=${pageCount }">[▶▶]</a>
 												</c:if>
 											</c:if>
 										</th>
 									</table>
 									<div class="operate_btn">
-										<button id="add_inven" onclick="window.location='host_addInven.pdt'" >추가</button>
-										<button id="udt_inven" onclick="window.location='host_udtInven.pdt'" >수정</button>
-										<button id="dlt_inven" onclick="window.location='host_dltInven.pdt'" >삭제</button>
-										<button id="slt_inven" onclick="window.location='host_sltInven.pdt'" >조회</button>
+										<button id="add_inven" onclick="window.location='host_addInven'" >추가</button>
+										<button id="udt_inven" onclick="window.location='host_udtInven'" >수정</button>
+										<button id="dlt_inven" onclick="window.location='host_dltInven'" >삭제</button>
+										<button id="slt_inven" onclick="window.location='host_sltInven'" >조회</button>
 									</div>
 								</div>
 							</div>

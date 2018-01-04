@@ -80,7 +80,7 @@
 								</div>
 									<form class="" action="buyWishListProductPro.order" name="buyWishListProductPro">  
 										<c:forEach var="checkedCarttt" items="${checkedCart }" varStatus="status">	
-											<input type="hidden" name="checkedCarts" value="${checkedCarttt}">
+											<input type="hidden" name="checkedCarts" value="${checkedCarttt.cart_id}">
 										</c:forEach>
 										<div class="order-list">
 											<h3>01. 주문상품목록</h3>
@@ -93,15 +93,15 @@
 													<td class="order-table_column" colspan=2>합계</td>
 													<td class="order-table_column" colspan=2>배송/판매자</td>
 												</tr>
-												<c:forEach var="memberInfo" items="${memberInfo }" varStatus="status">
+												<c:forEach var="checkedCart" items="${checkedCart }">
 													<tr class="order-table_row">
-														<td class="order_table_column" colspan=2>${checkedCart[status.index]}</td>
-														<td class="order-table_column" colspan=2><img src="/WebProject_jsp/WebContent/a/images/best-sell-images/${productInfo[status.index].img_path }" style="width:100px;height:100px">${pVo.product_name }</td>
-														<td class="order-table_column" colspan=2>${productInfo[status.index].product_price }</td>
-														<td class="order-table_column" colspan=2>${productInfo[status.index].product_amount }</td>
-														<td class="order-table_column" colspan=2>${productInfo[status.index].product_price * productInfo[status.index].product_amount}</td>
+														<td class="order_table_column" colspan=2>${checkedCart.cart_id}</td>
+														<td class="order-table_column" colspan=2><img src="/WebProject_jsp/WebContent/a/images/best-sell-images/${checkedCart.product.img_name }" style="width:100px;height:100px">${checkedCart.product.product_name }</td>
+														<td class="order-table_column" colspan=2>${checkedCart.product.product_price }</td>
+														<td class="order-table_column" colspan=2>${checkedCart.amount }</td>
+														<td class="order-table_column" colspan=2>${checkedCart.product.product_price * checkedCart.amount}</td>
 														<td class="order-table_column" colspan=2>host</td>
-														<c:set var="totalPricee" value="${totalPrice = totalPrice + (productInfo[status.index].product_price * productInfo[status.index].product_amount) }" scope="request"/>
+														<c:set var="totalPricee" value="${totalPrice = totalPrice + (checkedCart.product.product_price * checkedCart.amount) }" scope="request"/>
 													</tr>
 												</c:forEach>
 											</table>
@@ -126,7 +126,7 @@
 														주문정보
 													</td>
 													<td colspan="3">
-														${memberInfo[0].name }&nbsp;&nbsp;|&nbsp;&nbsp;${memberInfo[0].email}&nbsp;&nbsp;|&nbsp;&nbsp;${memberInfo[0].hp}&nbsp;&nbsp; >> 주문/배송에 관한 SMS 및 메일이 발송됩니다.
+														${memberInfo.name }&nbsp;&nbsp;|&nbsp;&nbsp;${memberInfo.email}&nbsp;&nbsp;|&nbsp;&nbsp;${memberInfo.hp}&nbsp;&nbsp; >> 주문/배송에 관한 SMS 및 메일이 발송됩니다.
 													</td>
 												</tr>
 												<tr class="order-table_row">
@@ -146,9 +146,9 @@
 														배송지정보
 													</td>
 													<td class="order-table_column"> 
-														${memberInfo[0].name }<br>
-														${memberInfo[0].hp }<br>
-														${memberInfo[0].address }<br>
+														${memberInfo.name }<br>
+														${memberInfo.hp }<br>
+														${memberInfo.address }<br>
 													</td>
 												</tr>
 												<tr class="order-table_row">

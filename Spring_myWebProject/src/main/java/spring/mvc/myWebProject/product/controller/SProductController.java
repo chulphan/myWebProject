@@ -126,4 +126,10 @@ public class SProductController {
 		
 		return "/product/host_udtInvenPro";
 	}
+	
+	@RequestMapping(value="detailProduct")
+	public String detailProduct(HttpServletRequest req, Model model) {
+		
+		return "/product/detailProduct";
+	}
 }
