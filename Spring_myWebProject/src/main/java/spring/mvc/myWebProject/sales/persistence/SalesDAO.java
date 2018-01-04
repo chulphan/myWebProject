@@ -1,24 +1,32 @@
 package spring.mvc.myWebProject.sales.persistence;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import spring.mvc.myWebProject.sales.vo.SalesVO;
 
 public interface SalesDAO {
-	public ArrayList<SalesVO> getArticleList(int start, int end);
+	public ArrayList<SalesVO> getArticleList(Map<String, Object> map);
 
 	public int	getNumOfSale();
 	
-	public SalesVO getSaleContent(String sales_code);
-
-	public int approvalPayPro(SalesVO sVo);
+	public ArrayList<SalesVO> getOrderInfo(Map<String, Object> co);
 	
+	public int updateProductAmount(Map<String, Object> map);
+	
+	public int deleteOrder(String order_code);
+	/*
+	public SalesVO getSaleContent(String sales_code);
+	*/
+	
+	public int approvalPayPro(SalesVO sVo);
+	/*
 	public int getFinalAccount();
-
-	public int getNumOfSale(String curr_id);
-
-	public ArrayList<SalesVO> getArticleList(String curr_id, int start, int end);
-
+	*/
+	public int cust_getNumOfSale(Map<String, Object> mm);
+	
+	public ArrayList<SalesVO> cust_getArticleList(Map<String, Object> map);
+	/*
 	public ArrayList<String> getIdAndPdt(String sales_code);
 
 	public int getRefundAmount(String sales_code);
@@ -32,4 +40,4 @@ public interface SalesDAO {
 	public void updateFinalAccount(int finalAccount);
 
 	public void insertFinalAccount(int finalAccount);
-}
+*/}

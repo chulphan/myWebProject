@@ -9,5 +9,105 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
     
 <mapper namespace="spring.mvc.myWebProject.sales.persistence.SalesDAO">
-
+	
+	
+	<resultMap id="salesMap"	type="spring.mvc.myWebProject.sales.vo.SalesVO">
+		<id		property="sales_code"			column="sales_code"/>
+		<result	property="num"					column="num"/>
+		<result	property="id"					column="id"/>
+		<result property="product_code"			column="product_code"/>
+		<result	property="amount"				column="amount"/>
+		<result	property="sales_date"			column="sales_date"/>
+		<result	property="deliver_status"		column="deliver_status"/>
+		<association property="member"			resultMap="memberMap"/>
+		<association property="product"			resultMap="productMap"/>
+		<association property="order"			resultMap="orderMap"/>
+	</resultMap>
+	
+	<resultMap id="productMap" type="spring.mvc.myWebProject.product.vo.ProductVO">
+		<result property="img_name"			column="img_name"/>
+		<result property="product_company"  column="product_company"/>
+		<result property="product_amount"	column="product_amount"/>
+		<result	property="product_price"	column="product_price"/>
+		<result property="product_name"		column="product_name"/>
+	</resultMap>
+	
+	<resultMap id="memberMap" type="spring.mvc.myWebProject.member.vo.MemberVO">
+		<result property="name"		column="name"/>
+		<result	property="address"	column="address"/>
+		<result property="email"	column="email"/>
+		<result property="hp"		column="hp"/>
+		<result property="reg_date"	column="reg_date"/>
+	</resultMap>
+	
+	<resultMap id="orderMap" type="spring.mvc.myWebProject.order.vo.OrderVO">
+		<result property="id"			column="id"/>
+		<result property="order_code"	column="order_code"/>
+		<result property="amountOfPurchase"		column="amountofpurchase"/>
+		<result property="product_code"			column="product_code"/>
+		<result property="purchase_price"		column="purchase_price"/>
+	</resultMap>
+	
+	<select id="getArticleList" resultMap="salesMap">
+      <![CDATA[
+      SELECT * 
+   	  FROM (SELECT NUM, SALES_CODE, PRODUCT_CODE, PRODUCT_NAME, ID, AMOUNT, SALES_DATE, DELIVER_STATUS, ROWNUM NROWS
+            FROM (SELECT S.NUM, S.SALES_CODE, P.PRODUCT_CODE, P.PRODUCT_NAME, S.ID, S.AMOUNT, S.SALES_DATE, S.DELIVER_STATUS
+                  FROM SALES S LEFT OUTER JOIN PRODUCT P
+                  ON(S.PRODUCT_CODE=P.PRODUCT_CODE)
+                  ORDER BY S.NUM ASC
+                ))
+      WHERE NROWS >= #{start} AND NROWS <= #{end}
+	  ]]>
+	</select>
+	
+	<select id="getNumOfSale" resultType="int">
+		SELECT COUNT(*) FROM SALES
+	</select>
+	
+	<select id="getOrderInfo" resultMap="salesMap">
+		SELECT *
+		FROM (SELECT P.IMG_NAME, O.ID,O.ORDER_CODE, O.PRODUCT_CODE, O.AMOUNTOFPURCHASE, O.PURCHASE_PRICE, P.PRODUCT_AMOUNT, P.PRODUCT_PRICE 
+			  FROM ORDERS O LEFT OUTER JOIN PRODUCT P
+			  ON O.PRODUCT_CODE=P.PRODUCT_CODE
+		)
+		WHERE ORDER_CODE IN
+		<foreach item="order_code" collection="checkedOrder" open="(" separator="," close=")">
+			#{order_code}
+		</foreach>
+	</select>
+	
+	<insert id="approvalPayPro" parameterType="spring.mvc.myWebProject.sales.vo.SalesVO">
+		INSERT INTO SALES VALUES(#{sales_code}, SALES_SEQ.NEXTVAL, #{id}, #{product_code}, #{amount}, #{sales_date}, #{deliver_status})
+	</insert>
+	
+	<update id="updateProductAmount" parameterType="java.util.Map">
+		<![CDATA[	
+			UPDATE PRODUCT SET PRODUCT_AMOUNT = PRODUCT_AMOUNT - #{amount}
+			WHERE PRODUCT_CODE=#{product_code}
+		]]>
+	</update>
+	
+	<delete id="deleteOrder"	parameterType="String">
+		DELETE FROM ORDERS WHERE ORDER_CODE=#{order_code}
+	</delete>
+	
+	<select id="cust_getNumOfSale" resultType="int">
+		SELECT COUNT(*) FROM SALES WHERE ID=#{curr_id}
+	</select>
+	
+	<select id="cust_getArticleList" resultMap="salesMap">
+		 <![CDATA[
+      			SELECT * 
+   	  			FROM (SELECT NUM, SALES_CODE, PRODUCT_CODE, PRODUCT_NAME, ID, AMOUNT, SALES_DATE, DELIVER_STATUS, ROWNUM NROWS
+            			FROM (SELECT S.NUM, S.SALES_CODE, P.PRODUCT_CODE, P.PRODUCT_NAME, S.ID, S.AMOUNT, S.SALES_DATE, S.DELIVER_STATUS
+                  		FROM SALES S LEFT OUTER JOIN PRODUCT P
+                  		ON(S.PRODUCT_CODE=P.PRODUCT_CODE)
+                  		ORDER BY S.NUM ASC
+                		))
+      			WHERE NROWS >= #{start} AND NROWS <= #{end}
+      			AND ID=#{curr_id}
+	  ]]>
+	</select>
+	</select>
 </mapper>

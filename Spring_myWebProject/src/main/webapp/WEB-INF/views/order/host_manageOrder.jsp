@@ -98,10 +98,10 @@
 														<td class="orderList_column"> ${oAry.num } </td>
 														<td class="orderList_column" colspan="2"> ${oAry.order_code } </td>
 														<td class="orderList_column" colspan="2"> ${oAry.product_code } </td>
-														<td class="orderList_column" colspan="2"> ${oAry.getPurchase_price() } (${oAry.getProduct().product_price} * ${oAry.amountOfPurchase }) </td>
+														<td class="orderList_column" colspan="2"> ${oAry.purchase_price } (${oAry.product.product_price} * ${oAry.amountOfPurchase }) </td>
 														<td class="orderList_column" colspan="2"> ${oAry.amountOfPurchase } </td>
 														<td class="orderList_column" colspan="2"> ${oAry.id } </td>
-														<td class="orderList_column" colspan="2"> ${oAry.getMember().address}</td>
+														<td class="orderList_column" colspan="2"> ${oAry.member.address}</td>
 														<td class="orderList_column" colspan="2"> ${oAry.order_status } </td>
 													</tr>
 												</c:forEach>

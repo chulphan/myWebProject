@@ -1,101 +1,33 @@
 package spring.mvc.myWebProject.sales.persistence;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import spring.mvc.myWebProject.sales.vo.SalesVO;
 
+@Repository
 public class SalesDAOImpl implements SalesDAO{
 	
-	private static SalesDAOImpl sales = new SalesDAOImpl();
-	
-	DataSource datasource;
+	@Autowired
+	SqlSession sqlSession;
 	
 	public SalesDAOImpl() {
-		try {
-			
-			Context context = new InitialContext();
-			datasource = (DataSource) context.lookup("java:comp/env/jdbc/Oracle12g");
-			
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+
 	}
-	
-	public static SalesDAOImpl getInstance() {
-		return sales;
-	}
-	
-	
 	
 	@Override
-	public ArrayList<SalesVO> getArticleList(int start, int end) {
+	public ArrayList<SalesVO> getArticleList(Map<String, Object> map) {
 		
-		SalesVO sVo = null;
 		ArrayList<SalesVO> sVos = null;
 		
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		SalesDAO sDao = sqlSession.getMapper(SalesDAO.class);
 		
-		try {
+		sVos = sDao.getArticleList(map);
 			
-			conn = datasource.getConnection();
-			
-			String sql = "SELECT *" +
-						 " FROM (SELECT NROWS, NUM, SALES_CODE, ID, AMOUNT, PRODUCT_CODE, SALES_DATE, DELIVER_STATUS" +
-						 " FROM (SELECT NUM, SALES_CODE, ID, AMOUNT, PRODUCT_CODE, SALES_DATE, DELIVER_STATUS, ROWNUM NROWS" +
-						 "		 FROM SALES" +
-						 "  	 ORDER BY NUM ASC" +
-						 "	))" +
-						 " WHERE NROWS >= ? AND NROWS <= ?";
-			
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setInt(1, start);
-			pstmt.setInt(2, end);
-			
-			rs = pstmt.executeQuery();
-			
-			if (rs.next()) {
-				sVos = new ArrayList<SalesVO>();
-				
-				do {
-					
-					sVo = new SalesVO();
-					
-					sVo.setNum(rs.getInt(2));
-					sVo.setSales_code(rs.getString(3));
-					sVo.setId(rs.getString(4));
-					sVo.setAmount(rs.getInt(5));
-					sVo.setProduct_code(rs.getString(6));
-					sVo.setSales_date(rs.getTimestamp(7));
-					sVo.setDeliver_status(rs.getString(8));
-					
-					sVos.add(sVo);
-				}while(rs.next());
-			}
-			
-		}catch(SQLException se) {
-			se.printStackTrace();
-		}finally {
-			try {
-				
-				if(rs!=null)rs.close();
-				if(pstmt!=null)pstmt.close();
-				if(conn!=null)conn.close();
-				
-			}catch(SQLException se) {
-				se.printStackTrace();
-			}
-		}
 		return sVos;
 	}
 
@@ -104,39 +36,13 @@ public class SalesDAOImpl implements SalesDAO{
 
 		int numOfSale = 0;
 		
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		SalesDAO sDao = sqlSession.getMapper(SalesDAO.class);
 		
-		try {
-			
-			conn = datasource.getConnection();
-			
-			String sql = "SELECT COUNT(*) FROM SALES";
-			
-			pstmt = conn.prepareStatement(sql);
-			
-			rs = pstmt.executeQuery();
-			
-			if (rs.next()) {
-				numOfSale = rs.getInt(1);
-			}
-			
-		}catch(SQLException se) {
-			se.printStackTrace();
-		}finally {
-			try {
-				if (rs!=null)rs.close();
-				if (pstmt!=null)pstmt.close();
-				if (conn!=null)conn.close();
-			}catch(SQLException se) {
-				se.printStackTrace();
-			}
-		}
+		numOfSale = sDao.getNumOfSale();
 		
 		return numOfSale;
 	}
-
+/*
 	@Override
 	public SalesVO getSaleContent(String sales_code) {
 		
@@ -184,47 +90,17 @@ public class SalesDAOImpl implements SalesDAO{
 		}
 		return sVo;
 	}
-
+	*/
+	
 	@Override
 	public int approvalPayPro(SalesVO sVo) {
 		
-		int isApproval = 0;
+		SalesDAO sDao = sqlSession.getMapper(SalesDAO.class);
 		
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		
-		try {
-			
-			conn = datasource.getConnection();
-			
-			String sql = "INSERT INTO SALES"+
-						 " VALUES(?, SALES_SEQ.NEXTVAL, ?, ?, ?, ?, ?)";
-			
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, sVo.getSales_code());
-			pstmt.setString(2, sVo.getId());
-			pstmt.setString(3, sVo.getProduct_code());
-			pstmt.setInt(4, sVo.getAmount());
-			pstmt.setTimestamp(5, sVo.getSales_date());
-			pstmt.setString(6, sVo.getDeliver_status());
-			
-			isApproval = pstmt.executeUpdate();
-			
-		}catch(SQLException se) {
-			se.printStackTrace();
-		}finally {
-			try {
-				if(pstmt!=null)pstmt.close();
-				if(conn!=null)conn.close();
-			}catch(SQLException se) {
-				se.printStackTrace();
-			}
-		}
-		
-		return isApproval;
+		return sDao.approvalPayPro(sVo);
 	}
-
+	
+	/*
 	@Override
 	public int getFinalAccount() {
 		
@@ -268,113 +144,25 @@ public class SalesDAOImpl implements SalesDAO{
 		
 		return finalAccount;
 	}
-
+	*/
+	
 	@Override
-	public int getNumOfSale(String curr_id) {
-		int numOfSale = 0;
-		
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
-		try {
-			
-			conn = datasource.getConnection();
-			
-			String sql = "SELECT COUNT(*) FROM SALES"+
-						 " WHERE ID=?";
-			
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, curr_id);
-			
-			rs = pstmt.executeQuery();
-			
-			if (rs.next()) {
-				numOfSale = rs.getInt(1);
-			}
-			
-		}catch(SQLException se) {
-			se.printStackTrace();
-		}finally {
-			try {
-				if (rs!=null)rs.close();
-				if (pstmt!=null)pstmt.close();
-				if (conn!=null)conn.close();
-			}catch(SQLException se) {
-				se.printStackTrace();
-			}
-		}
-		
-		return numOfSale;
-	}
+	public int cust_getNumOfSale(Map<String, Object> mm) {
 
+		SalesDAO sDao = sqlSession.getMapper(SalesDAO.class);
+		
+		return sDao.cust_getNumOfSale(mm);
+	}
+	
+	
 	@Override
-	public ArrayList<SalesVO> getArticleList(String curr_id, int start, int end) {
+	public ArrayList<SalesVO> cust_getArticleList(Map<String, Object> map) {
 			
-		SalesVO sVo = null;
-		ArrayList<SalesVO> sVos = null;
+		SalesDAO sDao = sqlSession.getMapper(SalesDAO.class);
 		
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
-		try {
-			
-			conn = datasource.getConnection();
-			
-			String sql = "SELECT *" +
-						 " FROM (SELECT NROWS, NUM, SALES_CODE, ID, AMOUNT, PRODUCT_CODE, SALES_DATE, DELIVER_STATUS" +
-						 " FROM (SELECT NUM, SALES_CODE, ID, AMOUNT, PRODUCT_CODE, SALES_DATE, DELIVER_STATUS, ROWNUM NROWS" +
-						 "		 FROM SALES" +
-						 "  	 ORDER BY NUM ASC" +
-						 "	))" +
-						 " WHERE NROWS >= ? AND NROWS <= ?"+
-						 " AND ID=?";
-			
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setInt(1, start);
-			pstmt.setInt(2, end);
-			pstmt.setString(3, curr_id);
-			
-			rs = pstmt.executeQuery();
-			
-			if (rs.next()) {
-				sVos = new ArrayList<SalesVO>();
-				
-				do {
-					
-					sVo = new SalesVO();
-					
-					sVo.setNum(rs.getInt(2));
-					sVo.setSales_code(rs.getString(3));
-					sVo.setId(rs.getString(4));
-					sVo.setAmount(rs.getInt(5));
-					sVo.setProduct_code(rs.getString(6));
-					sVo.setSales_date(rs.getTimestamp(7));
-					sVo.setDeliver_status(rs.getString(8));
-					
-					sVos.add(sVo);
-				}while(rs.next());
-			}
-			
-		}catch(SQLException se) {
-			se.printStackTrace();
-		}finally {
-			try {
-				
-				if(rs!=null)rs.close();
-				if(pstmt!=null)pstmt.close();
-				if(conn!=null)conn.close();
-				
-			}catch(SQLException se) {
-				se.printStackTrace();
-			}
-		}
-		return sVos;
+		return sDao.cust_getArticleList(map);
 	}
-
+	/*
 	@Override
 	public ArrayList<String> getIdAndPdt(String sales_code) {
 
@@ -644,6 +432,30 @@ public class SalesDAOImpl implements SalesDAO{
 		return isUpdateStatus;
 	}
 
-	
+	*/
+
+	@Override
+	public ArrayList<SalesVO> getOrderInfo(Map<String, Object> cc) {
+		
+		SalesDAO sDao = sqlSession.getMapper(SalesDAO.class);
+		
+		return sDao.getOrderInfo(cc);
+	}
+
+	@Override
+	public int updateProductAmount(Map<String, Object> map) {
+
+		SalesDAO sDao = sqlSession.getMapper(SalesDAO.class);
+		
+		return sDao.updateProductAmount(map);
+	}
+
+	@Override
+	public int deleteOrder(String order_code) {
+
+		SalesDAO sDao = sqlSession.getMapper(SalesDAO.class);
+		
+		return sDao.deleteOrder(order_code);
+	}
 		
 }

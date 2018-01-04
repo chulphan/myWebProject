@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="mySetting.jsp" %>
-<%@ include file="myQuery.jsp" %>
+<%@ include file="/resources/mySetting.jsp" %>
+<%@ include file="/resources/myQuery.jsp" %>
 <script src="${myProject }script.js"></script>
 <link type="text/css" rel="stylesheet" href="${myProject }style.css">
 <html>
@@ -119,12 +119,12 @@
 													<td class="inventory_column" colspan="2"><input type="checkbox" name="checkSales" value="${sVo.sales_code }"> </td>
 													<td class="inventory_column" colspan="2"> ${sVo.num } </td>
 													<td class="inventory_column" colspan="2"> ${sVo.sales_code } </td>
-													<td class="inventory_column" colspan="2"> ${productInfo[status.index].product_code } </td>
-													<td class="inventory_column" colspan="2"> ${productInfo[status.index].product_name } </td>
-													<td class="inventory_column" colspan="2"> ${memberInfo[status.index].id } </td>
+													<td class="inventory_column" colspan="2"> ${sVo.product.product_code } </td>
+													<td class="inventory_column" colspan="2"> ${sVo.product.product_name } </td>
+													<td class="inventory_column" colspan="2"> ${sVo.member.id } </td>
 													<td class="inventory_column" colspan="2"> ${sVo.amount } </td>
 													<td class="inventory_column" colspan="2"> ${sVo.sales_date } </td>
-													<td class="inventory_column" colspan="2"> ${sVo.amount * productInfo[status.index].product_price } </td>
+													<td class="inventory_column" colspan="2"> ${sVo.amount * sVo.product.product_price } </td>
 													<td class="inventory_column" colspan="2"> ${sVo.deliver_status } </td>
 												</tr>
 											</c:forEach>
@@ -139,8 +139,8 @@
 										<th align="center">
 											<c:if test="${requestScope.cnt > 0 }">
 												<c:if test="${startPage > pageBlock }">
-													<a href="printSalesList.sales">[◀◀]</a>
-													<a href="printSalesList.sales?pageNum=${startPage - pageBlock }">[◀]</a>
+													<a href="printSalesList">[◀◀]</a>
+													<a href="printSalesList?pageNum=${startPage - pageBlock }">[◀]</a>
 												</c:if>
 												
 												<c:forEach var="i" begin="${startPage }" end="${endPage }">
@@ -148,20 +148,20 @@
 														<span><b>[${i }]</b></span>
 													</c:if>
 													<c:if test="${i!=currentPage }">
-														<a href="printSalesList.sales?pageNum=${i }">[${i }]</a>
+														<a href="printSalesList?pageNum=${i }">[${i }]</a>
 													</c:if>
 												</c:forEach>
 												<c:if test="${pageCount>endPage}">
-													<a href="printSalesList.sales?pageNum=${startPage+pageBlock }">[▶]</a>
-													<a href="printSalesList.sales?pageNum=${pageCount }">[▶▶]</a>
+													<a href="printSalesList?pageNum=${startPage+pageBlock }">[▶]</a>
+													<a href="printSalesList?pageNum=${pageCount }">[▶▶]</a>
 												</c:if>
 											</c:if>
 										</th>
 									</table>
-									<jsp:include page="host_finalAccount.jsp" flush="true">
+									<%-- <jsp:include page="host_finalAccount.jsp" flush="true">
 										<jsp:param name="finalAccount" value="${FinalAccount1 }"/>								
 										<jsp:param name="refundAccount" value="${RefundAccount }"/>
-									</jsp:include>
+									</jsp:include> --%>
 									<div class="operate_btn">
 										<input type="button" id="slt_inven" onclick="window.history.back()" value="이전으로">
 										<input type="button" id="slt_inven" onclick="window.location='printRefundList.refund'" value="환불목록">
