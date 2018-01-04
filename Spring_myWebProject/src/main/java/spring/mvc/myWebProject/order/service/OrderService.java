@@ -11,10 +11,9 @@ public interface OrderService {
 	public void buyProductPro(HttpServletRequest req, Model model);
 	
 	public void getCartProductDetail(HttpServletRequest req, Model model);
-	/*
-	public void buyWishProductPro(HttpServletRequest req, HttpServletResponse res);
-	*/
 	
+	public void buyWishProductPro(HttpServletRequest req, Model model);
+
 	public void getProductDetail(HttpServletRequest req, Model model);
 	
 	public void cust_orderList(HttpServletRequest req, Model model);

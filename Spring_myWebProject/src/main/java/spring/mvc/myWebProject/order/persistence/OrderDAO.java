@@ -35,5 +35,9 @@ public interface OrderDAO{
 	
 	public MemberVO getMemberInfo(String id);
 	
-	public ArrayList<CartVO> getCartContent(String checkedCart);
+	public ArrayList<CartVO> getCartContent(Map<String, Object> map);
+	
+	public int getProductPrice(String product_code);
+	
+	public int deleteWishListPro(Map<String, Object> map2);
 }

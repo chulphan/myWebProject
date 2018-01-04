@@ -268,14 +268,40 @@ public class OrderDAOImpl  implements OrderDAO{
 
 
 	@Override
-	public ArrayList<CartVO> getCartContent(String checkedCart) {
+	public ArrayList<CartVO> getCartContent(Map<String, Object> map) {
 
 		ArrayList<CartVO> cVo = null;
 		
 		OrderDAO oDao = sqlSession.getMapper(OrderDAO.class);
 		
-		cVo = oDao.getCartContent(checkedCart);
+		cVo = oDao.getCartContent(map);
 		
 		return cVo;
+	}
+
+
+	@Override
+	public int getProductPrice(String product_code) {
+		
+		int product_price = 0;
+		
+		OrderDAO oDao = sqlSession.getMapper(OrderDAO.class);
+		
+		product_price = oDao.getProductPrice(product_code);
+		
+		return product_price;
+	}
+
+
+	@Override
+	public int deleteWishListPro(Map<String, Object> map2) {
+
+		int isDelete = 0;
+		
+		OrderDAO oDao = sqlSession.getMapper(OrderDAO.class);
+		
+		isDelete = oDao.deleteWishListPro(map2);
+		
+		return isDelete;
 	}
 }

@@ -133,72 +133,81 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public void getCartProductDetail(HttpServletRequest req, Model model) {
 
+		String[] checkedCart = req.getParameterValues("checkCart");
 		
 		String curr_id = (String) req.getSession().getAttribute("curr_id");
 		
 		ArrayList<CartVO> checkCart = new ArrayList<CartVO>();
-
-
-		checkCart = oDao.getCartContent(curr_id);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("id", curr_id);
+		map.put("checkedCart", checkedCart);
+		
+		checkCart = oDao.getCartContent(map);
 		
 		model.addAttribute("checkedCart", checkCart);
 		model.addAttribute("memberInfo", checkCart.get(0).getMember());
 	}
-	/*
+	
 	@Override
-	public void buyWishProductPro(HttpServletRequest req, HttpServletResponse res) {
+	public void buyWishProductPro(HttpServletRequest req, Model model) {
 
 		String[] checked = req.getParameterValues("checkedCarts");
-
-		for (int i = 0; i < checked.length; i++) {
-			System.out.println(checked[i]);
-		}
+		
+		String id = (String) req.getSession().getAttribute("curr_id");
+		
 		if (checked.length > 0) {
-
-			ProductDAO pDao = ProductDAOImpl.getInstance();
-			CartDAO cDao = CartDAOImpl.getInstance();
-			OrderDAO oDao = OrderDAOImpl.getInstance();
-
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			
+			map.put("id", id);
+			map.put("checkedCart", checked);
+			
 			int isAdded = 0;
 			int isDelete = 0;
+			
+			OrderVO oVo = new OrderVO();
+			ArrayList<CartVO> cVo = new ArrayList<CartVO>();
 
-			for (int i = 0; i < checked.length; i++) {
-
-				OrderVO oVo = new OrderVO();
-				CartVO cVo = new CartVO();
-
-				cVo = cDao.getCartContent(checked[i]);
+			cVo = oDao.getCartContent(map);
+			
+			for (int i = 0; i < cVo.size(); i++) {
 
 				int tempCode = (int) (Math.random() * 20000000 + 10000000);
 
 				String order_code = "O" + tempCode;
 
 				oVo.setOrder_code(order_code);
-				oVo.setNum(cVo.getNum());
-				oVo.setId(cVo.getId());
-				oVo.setProduct_code(cVo.getProduct_code());
-				oVo.setAmountOfPurchase(cVo.getAmount());
-				oVo.setPurchase_price(pDao.getProductPrice(cVo.getProduct_code()));
-				System.out.println(
-						pDao.getProductPrice(cVo.getProduct_code()) + "   pDao.getProductPrice(cVo.getProduct_code())");
+				oVo.setNum(cVo.get(i).getNum());
+				oVo.setId(cVo.get(i).getId());
+				oVo.setProduct_code(cVo.get(i).getProduct_code());
+				oVo.setAmountOfPurchase(cVo.get(i).getAmount());
+				oVo.setPurchase_price(oDao.getProductPrice(cVo.get(i).getProduct_code()));
 				oVo.setOrder_date(new Timestamp(System.currentTimeMillis()));
 				oVo.setOrder_status("결제대기");
 				oVo.setSeller_id("host");
 
 				if ((isAdded = oDao.insertIntoOrder(oVo)) == 1) {
-					isDelete = cDao.delWishListPro(cVo.getId(), checked[i]);
+					
+					Map<String, Object> map2 = new HashMap<String, Object>();
+					
+					map2.put("id", cVo.get(i).getId());
+					map2.put("checked", cVo.get(i).getCart_id());
+					
+					isDelete = oDao.deleteWishListPro(map2);
 
-					req.setAttribute("isAdded", isAdded);
-					req.setAttribute("isDelete", isDelete);
+					model.addAttribute("isAdded", isAdded);
+					model.addAttribute("isDelete", isDelete);
 				} else {
-					req.setAttribute("isAdded", 0);
-					req.setAttribute("isDelete", 0);
+					model.addAttribute("isAdded", 0);
+					model.addAttribute("isDelete", 0);
 				}
 			}
 
 		}
 	}
-	*/
+	
 	@Override
 	public void getProductDetail(HttpServletRequest req, Model model) {
 

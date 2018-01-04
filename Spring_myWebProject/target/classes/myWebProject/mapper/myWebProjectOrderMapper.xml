@@ -107,11 +107,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<association	property="product"	resultMap="productMap"/>
 	</resultMap>
 	
+	<sql id="selectCartContent">
+		SELECT C.CART_ID,  M.ID, M.NAME, P.PRODUCT_CODE, P.IMG_NAME, P.PRODUCT_COMPANY, P.PRODUCT_PRICE, P.PRODUCT_NAME, M.ADDRESS, M.EMAIL, M.HP, M.REG_DATE, C.AMOUNT
+    	FROM CART C LEFT OUTER JOIN MEMBER M
+    	ON C.ID=M.ID
+    	LEFT OUTER JOIN PRODUCT P
+    	ON P.PRODUCT_CODE=C.PRODUCT_CODE
+	</sql>
+		
 	<select id="getCartContent"		resultMap="cartMap">
 		SELECT C.CART_ID,  M.ID, M.NAME, P.PRODUCT_CODE, P.IMG_NAME, P.PRODUCT_COMPANY, P.PRODUCT_PRICE, P.PRODUCT_NAME, M.ADDRESS, M.EMAIL, M.HP, M.REG_DATE, C.AMOUNT
     	FROM CART C LEFT OUTER JOIN MEMBER M
     	ON C.ID=M.ID
     	LEFT OUTER JOIN PRODUCT P
     	ON P.PRODUCT_CODE=C.PRODUCT_CODE
+		WHERE M.ID=#{id} AND  
+   		C.CART_ID IN
+   		<foreach item="cart_id" collection="checkedCart"  open="(" separator="," close=")">
+   			#{cart_id}
+   		</foreach>
 	</select>
+	
+	<select id="getProductPrice"	resultType="int">
+		SELECT PRODUCT_PRICE
+		FROM PRODUCT
+		WHERE PRODUCT_CODE=#{product_code}
+	</select>
+	
+	<delete id="deleteWishListPro" parameterType="java.util.Map">
+		DELETE FROM CART
+		WHERE CART_ID=#{checked} 
+		AND ID=#{id}
+	</delete>
 </mapper>

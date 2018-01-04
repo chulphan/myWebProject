@@ -55,4 +55,12 @@ public class SOrderController {
 		
 		return "/order/buyWishListForm";
 	}
+	
+	@RequestMapping(value="buyWishListProductPro")
+	public String buyWishListProductPro(HttpServletRequest req, Model model) {
+		
+		oService.buyWishProductPro(req, model);
+		
+		return "/order/buyWishListProductPro";
+	}
 }

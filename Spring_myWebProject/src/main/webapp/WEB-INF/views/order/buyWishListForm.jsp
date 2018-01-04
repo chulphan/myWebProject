@@ -78,7 +78,7 @@
 									<h1 class="account-heading">주문/결제</h1>
 									<div class="account-toolbar"></div>
 								</div>
-									<form class="" action="buyWishListProductPro.order" name="buyWishListProductPro">  
+									<form class="" action="buyWishListProductPro" name="buyWishListProductPro">  
 										<c:forEach var="checkedCarttt" items="${checkedCart }" varStatus="status">	
 											<input type="hidden" name="checkedCarts" value="${checkedCarttt.cart_id}">
 										</c:forEach>
