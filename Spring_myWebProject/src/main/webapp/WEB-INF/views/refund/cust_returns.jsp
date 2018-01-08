@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="mySetting.jsp" %>
-<%@ include file="myQuery.jsp" %>
+<%@ include file="/resources/mySetting.jsp" %>
+<%@ include file="/resources/myQuery.jsp" %>
 <script src="${myProject }script.js"></script>
 <link type="text/css" rel="stylesheet" href="${myProject }style.css">
 <html>
@@ -122,11 +122,11 @@
 													<tr class="returns-table_row">
 														<td class="returns-table_column"><img src="images/best-sell-images/afImages/${productInfo[status.index].img_path }" style="width:70px;height:70px"></td>
 														<td class="returns-table_column" colspan=2>${rVo.num }</td>
-														<td class="returns-table_column" colspan=2>${productInfo[status.index].product_code }</td>
-														<td class="returns-table_column" colspan=2>${productInfo[status.index].product_name }</td>
-														<td class="returns-table_column" colspan=2>${productInfo[status.index].product_price}</td>
+														<td class="returns-table_column" colspan=2>${rVo.product_code }</td>
+														<td class="returns-table_column" colspan=2>${rVo.product.product_name }</td>
+														<td class="returns-table_column" colspan=2>${rVo.product.product_price}</td>
 														<td class="returns-table_column" colspan=2>${rVo.refund_amount }</td>
-														<td class="returns-table_column" colspan=2>${rVo.refund_amount * productInfo[status.index].product_price }</td>
+														<td class="returns-table_column" colspan=2>${rVo.refund_amount * rVo.product.product_price }</td>
 														<td class="returns-table_column" colspan=2>${rVo.refund_status }</td>
 													</tr>
 												</c:forEach>

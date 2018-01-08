@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="mySetting.jsp" %>
-<%@ include file="myQuery.jsp" %>
+<%@ include file="/resources/mySetting.jsp" %>
+<%@ include file="/resources/myQuery.jsp" %>
 <script src="${myProject }script.js"></script>
 <link type="text/css" rel="stylesheet" href="${myProject }style.css">
 <html>

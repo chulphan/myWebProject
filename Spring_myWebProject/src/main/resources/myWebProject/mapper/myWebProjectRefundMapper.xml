@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ 
+
+ <!DOCTYPE mapper
+
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="spring.mvc.myWebProject.refund.persistence.RefundDAO">
+	
+	<resultMap id="refundMap" type="spring.mvc.myWebProject.refund.vo.RefundVO">
+		<id 	property="refund_code"			column="refund_code"/>
+		<result property="num"					column="num"/>
+		<result property="id"					column="id"/>
+		<result property="product_code"			column="product_code"/>
+		<result property="refund_amount"		column="refund_amount"/>
+		<result property="refund_date"			column="refund_date"/>
+		<result property="refund_status"		column="refund_status"/>
+		<association property="product"		resultMap="productMap"/>
+		<association property="sale"		resultMap="salesMap"/>
+	</resultMap>
+	
+	<resultMap id="productMap" type="spring.mvc.myWebProject.product.vo.ProductVO">
+		<result property="img_name"			column="img_name"/>
+		<result property="product_company"  column="product_company"/>
+		<result property="product_amount"	column="product_amount"/>
+		<result	property="product_price"	column="product_price"/>
+		<result property="product_name"		column="product_name"/>
+	</resultMap>
+	
+	<resultMap id="salesMap"  type="spring.mvc.myWebProject.sales.vo.SalesVO">
+		<result property="product_code"		column="product_code"/>
+		<result property="amount"				column="amount"/>
+	</resultMap>
+	
+	<select id="getNumOfRefund" resultType="int">
+		SELECT COUNT(*) FROM REFUND
+	</select>
+	
+	<select id="getRefundCode" resultType="spring.mvc.myWebProject.refund.vo.RefundVO">
+		SELECT * FROM REFUND WHERE REFUND_CODE=#{refund_code}
+	</select>
+	
+	<select id="printRefundList" resultMap="refundMap">
+		
+		<![CDATA[	
+			SELECT *
+			FROM (SELECT num, refund_code, product_code, product_name, id, refund_amount, refund_date, product_price, refund_status, ROWNUM rnum
+	     		  FROM (SELECT r.num, r.refund_code, r.product_code, p.product_name, r.id, r.refund_amount, r.refund_date, p.product_price, r.refund_status 
+	              FROM refund r LEFT OUTER JOIN product p
+	              ON r.product_code=p.product_code
+	              ORDER BY r.num ASC
+	    		  ))
+	    	WHERE rnum >= #{start} and rnum <= #{end}
+		]]>
+		
+	</select>
+	
+	<select id="getSalesInfo" resultType="refundMap">
+		SELECT product_code, amount
+		FROM sales
+		WHERE 
+		sales_code IN
+		<foreach item="sales_code" collection="checkedSales" open="(" separator="," close=")">
+			#{sales_code}
+		</foreach>
+	</select>
+	
+	<insert id="insertIntoRefund" parameterType="spring.mvc.myWebProject.refund.vo.RefundVO">
+		INSERT INTO REFUND VALUES(#{refund_code}, REFUND_SEQ.NEXTVAL, #{id}, #{product_code}, #{refund_amount}, #{refund_date}, #{refund_status})
+	</insert>
+	
+	<select id="cust_getNumOfRefund" resultType="int">
+		SELECT COUNT(*) FROM REFUND WHERE ID=#{curr_id}
+	</select>
+	
+	<select id="cust_printRefundList" resultMap="refundMap">
+		
+		<![CDATA[	
+			SELECT *
+			FROM (SELECT num, refund_code, product_code, product_name, id, refund_amount, refund_date, product_price, refund_status, ROWNUM rnum
+	     		  FROM (SELECT r.num, r.refund_code, r.product_code, p.product_name, r.id, r.refund_amount, r.refund_date, p.product_price, r.refund_status 
+	              FROM refund r LEFT OUTER JOIN product p
+	              ON r.product_code=p.product_code
+	              ORDER BY r.num ASC
+	    		  ))
+	    	WHERE rnum >= #{start} and rnum <= #{end}
+	    	AND id=#{curr_id}
+		]]>
+		
+	</select>
+</mapper>

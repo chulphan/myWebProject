@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="mySetting.jsp" %>
-<%@ include file="myQuery.jsp" %>
+<%@ include file="/resources/mySetting.jsp" %>
+<%@ include file="/resources/myQuery.jsp" %>
 <script src="${myProject }script.js"></script>
 <link type="text/css" rel="stylesheet" href="${myProject }style.css">
 <html>
@@ -109,8 +109,8 @@
 												<td class="inventory_column" colspan="2"> 상품코드 </td>
 												<td class="inventory_column" colspan="2"> 상품명 </td>
 												<td class="inventory_column" colspan="2"> 구매자 </td>
-												<td class="inventory_column" colspan="2"> 구매수량 </td>
-												<td class="inventory_column" colspan="2"> 구매일자 </td>
+												<td class="inventory_column" colspan="2"> 환불수량 </td>
+												<td class="inventory_column" colspan="2"> 환불일자 </td>
 												<td class="inventory_column" colspan="2"> 거래가격 </td>
 												<td class="inventory_column" colspan="2"> 상태 </td>
 											</tr>
@@ -120,12 +120,12 @@
 														<td class="inventory_column" colspan="2"><input type="checkbox" name="checkRefund" value="${rVo.refund_code }"> </td>
 														<td class="inventory_column" colspan="2"> ${rVo.num } </td>
 														<td class="inventory_column" colspan="2"> ${rVo.refund_code } </td>
-														<td class="inventory_column" colspan="2"> ${productInfo[status.index].product_code } </td>
-														<td class="inventory_column" colspan="2"> ${productInfo[status.index].product_name } </td>
-														<td class="inventory_column" colspan="2"> ${memberInfo[status.index].id } </td>
+														<td class="inventory_column" colspan="2"> ${rVo.product_code } </td>
+														<td class="inventory_column" colspan="2"> ${rVo.product.product_name } </td>
+														<td class="inventory_column" colspan="2"> ${rVo.id } </td>
 														<td class="inventory_column" colspan="2"> ${rVo.refund_amount } </td>
 														<td class="inventory_column" colspan="2"> ${rVo.refund_date } </td>
-														<td class="inventory_column" colspan="2"> ${rVo.refund_amount * productInfo[status.index].product_price } </td>
+														<td class="inventory_column" colspan="2"> ${rVo.refund_amount * rVo.product.product_price } </td>
 														<td class="inventory_column" colspan="2"> ${rVo.refund_status } </td>
 													</tr>
 												</c:forEach>
@@ -140,8 +140,8 @@
 											<th align="center">
 												<c:if test="${requestScope.cnt > 0 }">
 													<c:if test="${startPage > pageBlock }">
-														<a href="printSalesList.sales">[◀◀]</a>
-														<a href="printSalesList.sales?pageNum=${startPage - pageBlock }">[◀]</a>
+														<a href="printSalesList">[◀◀]</a>
+														<a href="printSalesList?pageNum=${startPage - pageBlock }">[◀]</a>
 													</c:if>
 													
 													<c:forEach var="i" begin="${startPage }" end="${endPage }">
@@ -149,12 +149,12 @@
 															<span><b>[${i }]</b></span>
 														</c:if>
 														<c:if test="${i!=currentPage }">
-															<a href="printSalesList.sales?pageNum=${i }">[${i }]</a>
+															<a href="printSalesList?pageNum=${i }">[${i }]</a>
 														</c:if>
 													</c:forEach>
 													<c:if test="${pageCount>endPage}">
-														<a href="printSalesList.sales?pageNum=${startPage+pageBlock }">[▶]</a>
-														<a href="printSalesList.sales?pageNum=${pageCount }">[▶▶]</a>
+														<a href="printSalesList?pageNum=${startPage+pageBlock }">[▶]</a>
+														<a href="printSalesList?pageNum=${pageCount }">[▶▶]</a>
 													</c:if>
 												</c:if>
 											</th>

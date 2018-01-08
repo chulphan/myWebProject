@@ -6,20 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import mpj.member.vo.MemberVO;
-import mpj.product.vo.ProductVO;
-import spring.mvc.myWebProject.order.persistence.OrderDAO;
-import spring.mvc.myWebProject.order.persistence.OrderDAOImpl;
-import spring.mvc.myWebProject.product.persistence.ProductDAO;
-import spring.mvc.myWebProject.product.persistence.ProductDAOImpl;
 import spring.mvc.myWebProject.sales.persistence.SalesDAO;
-import spring.mvc.myWebProject.sales.persistence.SalesDAOImpl;
 import spring.mvc.myWebProject.sales.vo.SalesVO;
 
 @Service
@@ -91,21 +83,21 @@ public class SalesServiceImpl implements SalesService {
 		if (endPage > pageCount)
 			endPage = pageCount; // 이런 경우는 언제 발생하는거지?
 
-		req.setAttribute("cnt", cnt);
-		req.setAttribute("number", number);
-		req.setAttribute("pageNum", pageNum);
+		model.addAttribute("cnt", cnt);
+		model.addAttribute("number", number);
+		model.addAttribute("pageNum", pageNum);
 
 		if (cnt > 0) {
-			req.setAttribute("startPage", startPage);
+			model.addAttribute("startPage", startPage);
 
 			// 마지막 페이지
-			req.setAttribute("endPage", endPage);
+			model.addAttribute("endPage", endPage);
 			// 출력할 페이지 갯수
-			req.setAttribute("pageBlock", pageBlock);
+			model.addAttribute("pageBlock", pageBlock);
 			// 페이지 갯수
-			req.setAttribute("pageCount", pageCount);
+			model.addAttribute("pageCount", pageCount);
 			// 현재 페이지
-			req.setAttribute("currentPage", currentPage);
+			model.addAttribute("currentPage", currentPage);
 		}
 	}
 
@@ -237,8 +229,8 @@ public class SalesServiceImpl implements SalesService {
 		
 		
 		// 글 갯수 구하기.
-		Map<String, Object> mm = new HasMap<String, Object>();
-		mm.put("curr_id", (String) req.getSession().getAttribute("curr_id"))
+		Map<String, Object> mm = new HashMap<String, Object>();
+		mm.put("curr_id", (String) req.getSession().getAttribute("curr_id"));
 		cnt = sDao.cust_getNumOfSale(mm);
 		
 		pageNum = req.getParameter("pageNum");
