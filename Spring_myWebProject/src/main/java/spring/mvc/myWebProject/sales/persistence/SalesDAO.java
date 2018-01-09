@@ -19,6 +19,8 @@ public interface SalesDAO {
 	public SalesVO getSaleContent(String sales_code);
 	*/
 	
+	public int updateFinalAccount(int salesAccount);
+	
 	public int approvalPayPro(SalesVO sVo);
 	/*
 	public int getFinalAccount();
@@ -26,6 +28,8 @@ public interface SalesDAO {
 	public int cust_getNumOfSale(Map<String, Object> mm);
 	
 	public ArrayList<SalesVO> cust_getArticleList(Map<String, Object> map);
+	
+	public int getFinalAccount();
 	/*
 	public ArrayList<String> getIdAndPdt(String sales_code);
 

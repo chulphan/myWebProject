@@ -98,13 +98,13 @@
 								<div class="account-header">
 									<h1 class="account-heading">환불신청 처리</h1>
 									<div class="account-toolbar"></div>
-									<c:if test="${isAdded == numOfRefund}">
+									<c:if test="${isDelete == numOfRefund}">
 										<script type="text/javascript">
 											alert("환불신청완료");
-											window.location="mainSuccess.do";
+											window.location="mainSuccess";
 										</script>
 									</c:if>
-									<c:if test="${isAdded != numOfRefund}">
+									<c:if test="${isDelete != numOfRefund}">
 										<script type="text/javascript">
 											alert("환불신청실패");
 											window.history.back();

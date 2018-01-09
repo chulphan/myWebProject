@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 	</select>
 	
-	<select id="getSalesInfo" resultType="refundMap">
+	<select id="getSalesInfo" resultMap="refundMap">
 		SELECT product_code, amount
 		FROM sales
 		WHERE 
@@ -91,4 +91,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		]]>
 		
 	</select>
+	
+	<select id="getRefundInfo" resultMap="refundMap">
+		SELECT id, refund_code,refund_amount, product_code
+		FROM refund
+		WHERE 
+		refund_code IN
+		<foreach item="refund_code" collection="checkedRefund" open="(" separator="," close=")">
+			#{refund_code}
+		</foreach>
+	</select>
+	
+	<update id="updateProductAmount" parameterType="java.util.Map">
+		UPDATE product 
+		SET product_amount = product_amount + #{amount}
+		WHERE product_code=#{product_code}
+	</update>
+	
+	<update id="updateRefundStatus" parameterType="String">
+		UPDATE refund
+		SET refund_status='환불승인'
+		WHERE refund_code=#{refund_code}
+	</update>
+	
+	<delete id="deleteSales" parameterType="String">
+		DELETE 
+		FROM sales
+		WHERE sales_code=#{deleteSalesCode}
+	</delete>
+	
+	<update id="updateFinalAccount" parameterType="int">
+		UPDATE final_account
+		SET finalaccount = finalaccount-#{refundAccount}
+		WHERE num=1
+	</update>
 </mapper>

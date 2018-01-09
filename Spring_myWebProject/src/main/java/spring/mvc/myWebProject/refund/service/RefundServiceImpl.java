@@ -187,9 +187,6 @@ public class RefundServiceImpl implements RefundService{
 			// Refund_code를 생성.
 			String refund_code = "R" + checkedSales[i];
 			
-			// i번째 Sales_code를 checkedOrder 배열에서 가져온다.
-			String sales_code = checkedSales[i];
-			
 			// salesDAO에서 현재 sales_code에 대한 주문자(id)와 주문내역(product_code)를 가져온다.
 			
 			// refundVO 에 들어갈 데이터 셋팅.
@@ -222,77 +219,45 @@ public class RefundServiceImpl implements RefundService{
 		}	
 	}
 
-	/*
+	
 	@Override
-	public void host_approvalRefundPro(HttpServletRequest req, HttpServletResponse res) {
+	public void host_approvalRefundPro(HttpServletRequest req, Model model) {
 		
 		String[] checkedRefund = req.getParameterValues("checkRefund");
-		
-		ProductDAO pDao = ProductDAOImpl.getInstance();
-		SalesDAO sDao = SalesDAOImpl.getInstance();
-		RefundDAO rDao = RefundDAOImpl.getInstance();
 		
 		int isDelete = 0;
 		int isUpdateRefund = 0;
 		int isUpdateProduct = 0;
+		int isUpdateAccount = 0;
 		
-		RefundVO rVo = null;
+		Map<String, Object> map2 = new HashMap<String, Object>();
 		
-		if (checkedRefund!=null) {
-			for (int i = 0; i < checkedRefund.length; i++) {
+		map2.put("checkedRefund", checkedRefund);
+		
+		ArrayList<RefundVO> rVos = rDao.getRefundInfo(map2);
+		
+		for (int i = 0; i < rVos.size(); i++) {
 			
-				
-				rVo = new RefundVO();
-				
-				ArrayList<String> idAndRfd = rDao.getIdAndRfd(checkedRefund[i]);
+			String id = rVos.get(i).getId();
+			String product_code = rVos.get(i).getProduct_code();
+			int amount = rVos.get(i).getRefund_amount();
 			
-				String id = idAndRfd.get(0);
-				String product_code = idAndRfd.get(1);
-				
-				int currAmount = pDao.getProductAmount(product_code);
-				int amount = rDao.host_getNumOfRefund(checkedRefund[i]);
-				int updateAmount = currAmount + amount;
-				
-				String deleteSalesCode = checkedRefund[i].substring(1);
-				System.out.println(deleteSalesCode + "deleteSalesCode");
-				
-				isDelete += sDao.deleteSales(deleteSalesCode);
-				isUpdateProduct += pDao.updateProductAmount(product_code, updateAmount);
-				isUpdateRefund += rDao.updateRefundStatus(checkedRefund[i]);
-				
-				if (isDelete == 0 && isUpdateProduct == 0) {
-					isDelete = sDao.updateSalesStatus(deleteSalesCode);
-					isUpdateProduct = pDao.updateProductAmount(product_code, updateAmount);
-					
-					if ((isDelete == (i+1)) && (isUpdateProduct == (i+1))) {
-						isUpdateRefund = rDao.updateRefundStatus(checkedRefund[i]);
-					}
-				}else {
-					isDelete += sDao.updateSalesStatus(deleteSalesCode);
-					isUpdateProduct += pDao.updateProductAmount(product_code, updateAmount);
-					
-					if ((isDelete == (i+1)) && (isUpdateProduct == (i+1))) {
-						isUpdateRefund += rDao.updateRefundStatus(checkedRefund[i]);
-					}
-				}
-			}
+			Map<String, Object> map = new HashMap<String, Object>();
 			
-			System.out.println(isDelete + "isDelete");
-			System.out.println(isUpdateProduct + "isUpdateProduct");
-			System.out.println(isUpdateRefund + "isUpdateRefund");
-			System.out.println(checkedRefund.length + "len_checkedRefund");
+			map.put("id", id);
+			map.put("product_code", product_code);
+			map.put("amount", amount);
 			
-			req.setAttribute("isDelete", isDelete);
-			req.setAttribute("isUpdateProduct", isUpdateProduct);
-			req.setAttribute("isUpdateRefund", isUpdateRefund);
-			req.setAttribute("len_checkedRefund", checkedRefund.length);
-		}else {
-			req.setAttribute("isDelete", null);
-			req.setAttribute("isUpdateProduct", null);
-			req.setAttribute("isUpdateRefund", null);
-			req.setAttribute("len_checkedRefund", null);
+			String deleteSalesCode = rVos.get(i).getRefund_code().substring(1);
+			
+			isDelete += rDao.deleteSales(deleteSalesCode);
+			isUpdateProduct += rDao.updateProductAmount(map);
+			isUpdateRefund += rDao.updateRefundStatus(checkedRefund[i]);
+			isUpdateAccount += rDao.updateFinalAccount(rVos.get(i).getRefund_amount() * rVos.get(i).getProduct().getProduct_price());
 		}
 		
+		model.addAttribute("isDelete", isDelete);
+		model.addAttribute("numOfRefund", rVos.size());
+		
 	}
-*/
 }

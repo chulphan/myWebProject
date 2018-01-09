@@ -34,8 +34,16 @@ public class SRefundController {
 	@RequestMapping(value="cust_returns")
 	public String cust_returns(HttpServletRequest req, Model model) {
 		
-		
+		rService.curt_printRefundList(req, model);
 		
 		return "/refund/cust_returns";
+	}
+	
+	@RequestMapping(value="host_approvalRefundPro")
+	public String host_approvalRefundPro(HttpServletRequest req, Model model) {
+		
+		rService.host_approvalRefundPro(req, model);
+		
+		return "/refund/host_approvalRefundPro";
 	}
 }

@@ -99,8 +99,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="cust_getArticleList" resultMap="salesMap">
 		 <![CDATA[
       			SELECT * 
-   	  			FROM (SELECT NUM, SALES_CODE, PRODUCT_CODE, PRODUCT_NAME, ID, AMOUNT, SALES_DATE, DELIVER_STATUS, ROWNUM NROWS
-            			FROM (SELECT S.NUM, S.SALES_CODE, P.PRODUCT_CODE, P.PRODUCT_NAME, S.ID, S.AMOUNT, S.SALES_DATE, S.DELIVER_STATUS
+   	  			FROM (SELECT NUM, SALES_CODE, PRODUCT_PRICE, PRODUCT_CODE, PRODUCT_NAME, ID, AMOUNT, SALES_DATE, DELIVER_STATUS, ROWNUM NROWS
+            			FROM (SELECT S.NUM, P.PRODUCT_PRICE,S.SALES_CODE, P.PRODUCT_CODE, P.PRODUCT_NAME, S.ID, S.AMOUNT, S.SALES_DATE, S.DELIVER_STATUS
                   		FROM SALES S LEFT OUTER JOIN PRODUCT P
                   		ON(S.PRODUCT_CODE=P.PRODUCT_CODE)
                   		ORDER BY S.NUM ASC
@@ -108,5 +108,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       			WHERE NROWS >= #{start} AND NROWS <= #{end}
       			AND ID=#{curr_id}
 	  ]]>
+	</select>
+	
+	<update id="updateFinalAccount" parameterType="int">
+		UPDATE final_account
+		SET finalaccount = finalaccount + #{salesAccount}
+		WHERE num=1
+	</update>
+	
+	<select id="getFinalAccount" resultType="int">
+		SELECT * 
+		FROM final_account
 	</select>
 </mapper>

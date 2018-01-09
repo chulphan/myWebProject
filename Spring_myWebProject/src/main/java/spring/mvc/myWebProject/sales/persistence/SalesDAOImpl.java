@@ -457,5 +457,21 @@ public class SalesDAOImpl implements SalesDAO{
 		
 		return sDao.deleteOrder(order_code);
 	}
+
+	@Override
+	public int updateFinalAccount(int salesAccount) {
+
+		SalesDAO sDao = sqlSession.getMapper(SalesDAO.class);
+		
+		return sDao.updateFinalAccount(salesAccount);
+	}
+
+	@Override
+	public int getFinalAccount() {
+
+		SalesDAO sDao = sqlSession.getMapper(SalesDAO.class);
+		
+		return sDao.getFinalAccount();
+	}
 		
 }

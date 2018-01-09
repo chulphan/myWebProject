@@ -119,7 +119,8 @@ public class SalesServiceImpl implements SalesService {
 
 		// isDelete : OrderVO 에 해당 order_code의 삭제가 성공한 횟수.
 		int isDelete = 0;
-
+		
+		int isUpdateAccount = 0;
 		Map<String, Object> co = new HashMap<String, Object>();
 
 		co.put("checkedOrder", checkedOrder);
@@ -139,7 +140,6 @@ public class SalesServiceImpl implements SalesService {
 
 			// salesVO 에 들어갈 데이터 셋팅.
 			String id = sVo.get(i).getOrder().getId();
-			System.out.println(id + "id+=asdf=sdf=sdf=");
 			String product_code = sVo.get(i).getOrder().getProduct_code();
 			Timestamp sales_date = new Timestamp(System.currentTimeMillis());
 			int amount = sVo.get(i).getOrder().getAmountOfPurchase();
@@ -169,10 +169,12 @@ public class SalesServiceImpl implements SalesService {
 				isAdded = sDao.approvalPayPro(iSvo);
 				isUpdate = sDao.updateProductAmount(map);
 				isDelete = sDao.deleteOrder(order_code);
+				isUpdateAccount = sDao.updateFinalAccount(sVo.get(i).getProduct().getProduct_price() * amount);
 			} else {
 				isAdded += sDao.approvalPayPro(iSvo);
 				isUpdate += sDao.updateProductAmount(map);
 				isDelete += sDao.deleteOrder(order_code);
+				isUpdateAccount = sDao.updateFinalAccount(sVo.get(i).getProduct().getProduct_price() * amount);
 			}
 
 			// 위의 작업 내용들을 setAttribute 해준다.
@@ -181,6 +183,7 @@ public class SalesServiceImpl implements SalesService {
 			model.addAttribute("isUpdate", isUpdate);
 			model.addAttribute("isDelete", isDelete);
 			model.addAttribute("numOfOrder", checkedOrder.length);
+			model.addAttribute("finalAccount", sDao.getFinalAccount());
 		}
 	}
 	/*
@@ -255,11 +258,15 @@ public class SalesServiceImpl implements SalesService {
 		
 		if (cnt > 0) {
 			
+			System.out.println(start + "start++++++++++++++");
+			System.out.println(end + "end++++++++++++++");
+			
+			
 			Map<String, Object> map = new HashMap<String, Object>();
 			
 			map.put("curr_id", (String) req.getSession().getAttribute("curr_id"));
 			map.put("start", start);
-			map.put("end", end);
+			map.put("end", 8);
 			
 			sVos = sDao.cust_getArticleList(map);
 			

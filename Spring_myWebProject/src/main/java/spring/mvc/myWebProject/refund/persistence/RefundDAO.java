@@ -20,12 +20,14 @@ public interface RefundDAO {
 	public int cust_getNumOfRefund(String curr_id);
 
 	public ArrayList<RefundVO> cust_printRefundList(Map<String, Object> map);
-	/*
-	public int host_getNumOfRefund(String refund_code);
 	
-	public int calRefundAmount();
-
-	public ArrayList<String> getIdAndRfd(String refund_code);
-
-	public int updateRefundStatus(String refund_code);*/
+	public ArrayList<RefundVO> getRefundInfo(Map<String, Object> map2);
+	
+	public int updateProductAmount(Map<String, Object> map);
+	
+	public int updateRefundStatus(String refund_code);
+	
+	public int deleteSales(String deleteSalesCode);
+	
+	public int updateFinalAccount(int refundAccount);
 }

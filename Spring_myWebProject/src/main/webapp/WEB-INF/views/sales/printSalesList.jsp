@@ -3,7 +3,6 @@
 <%@ include file="/resources/mySetting.jsp" %>
 <%@ include file="/resources/myQuery.jsp" %>
 <script src="${myProject }script.js"></script>
-<link type="text/css" rel="stylesheet" href="${myProject }style.css">
 <html>
 <body>
 	<div class="site-wrapper">
@@ -158,10 +157,9 @@
 											</c:if>
 										</th>
 									</table>
-									<%-- <jsp:include page="host_finalAccount.jsp" flush="true">
-										<jsp:param name="finalAccount" value="${FinalAccount1 }"/>								
-										<jsp:param name="refundAccount" value="${RefundAccount }"/>
-									</jsp:include> --%>
+									<jsp:include page="host_finalAccount.jsp" flush="true">
+										<jsp:param name="finalAccount" value="${finalAccount }"/>								
+									</jsp:include>
 									<div class="operate_btn">
 										<input type="button" id="slt_inven" onclick="window.history.back()" value="이전으로">
 										<input type="button" id="slt_inven" onclick="window.location='printRefundList.refund'" value="환불목록">
